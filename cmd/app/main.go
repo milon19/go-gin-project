@@ -2,7 +2,22 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
+	"healthousedemo/cmd/app/config"
+	"log"
 )
+
+func init() {
+	initEnv()
+}
+
+func initEnv() {
+	log.Printf("Loading environment setting")
+	if err := godotenv.Load(".env"); err != nil {
+		log.Println("No local env file. Using global OS environment variables")
+	}
+	config.SetEnvironment()
+}
 
 func main() {
 	r := gin.Default()
@@ -11,5 +26,7 @@ func main() {
 			"message": "pong",
 		})
 	})
-	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	if runError := r.Run(":" + config.GinPort); runError != nil {
+		log.Println(runError)
+	}
 }

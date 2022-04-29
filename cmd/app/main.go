@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"healthousedemo/cmd/app/config"
+	db "healthousedemo/internal/app/adapter/db/connections"
 	"log"
 )
 
@@ -17,6 +18,7 @@ func initEnv() {
 		log.Println("No local env file. Using global OS environment variables")
 	}
 	config.SetEnvironment()
+	db.Connect()
 }
 
 func main() {
